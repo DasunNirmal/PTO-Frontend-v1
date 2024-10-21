@@ -21,6 +21,10 @@ $(document).ready(() => {
     loadOrderTableHome();
 });
 
+function setTodayOrders(orderCount) {
+    $('#totalTodayOrders').text(orderCount);
+}
+
 function totalOrdersHome(count) {
     $('#totalOrdersHome').text(count);
 }
@@ -105,6 +109,7 @@ $('#nav-home-section').on('click',() => {
     totalCustomersHome();
     totalItemsHome();
     totalSales();
+    setTodayOrders();
 });
 
 function loadOrderTableHome() {
@@ -129,9 +134,16 @@ function loadOrderTableHome() {
                     </tr>`
                     $('#orders-summary').append(orderRecord);
                     totalOfSales += order.totalPrice;
+
+                    var d = new Date();
+                    var strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate();
+                    console.log(strDate);
+
+                    let countTodayOrders = res.filter(orderDate => orderDate.orderDate === strDate).length;
+                    setTodayOrders(countTodayOrders);
+
                 });
                 totalSales(totalOfSales);
-
                 let count = 0;
                 for (let i = 0; i < res.length; i++) {
                     if (res[i] != null) {
